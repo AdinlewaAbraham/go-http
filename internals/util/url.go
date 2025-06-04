@@ -34,7 +34,6 @@ func ExtractUrl(buff []byte) (*ParsedRequestInfo, error) {
 	info := ParsedRequestInfo{
 		Header: make(map[string]string),
 	}
-	info.Body = bodyPart
 
 	scanner := bufio.NewScanner(strings.NewReader(headersPart))
 	for scanner.Scan() {
@@ -79,9 +78,20 @@ func ExtractUrl(buff []byte) (*ParsedRequestInfo, error) {
 			} else {
 				info.ContentLength = length
 			}
+			info.Body = bodyPart[:length]
 		}
 
 		info.Header[header] = content
+	}
+
+	if info.ContentLength > 0 {
+		if len(bodyPart) >= info.ContentLength {
+			info.Body = bodyPart[:info.ContentLength]
+		} else {
+			return nil, errors.New("body is shorter than declared Content-Length")
+		}
+	} else {
+		info.Body = bodyPart
 	}
 
 	if info.Path == "" {
