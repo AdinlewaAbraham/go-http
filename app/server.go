@@ -97,7 +97,13 @@ func main() {
 		}
 
 		log.Println("created file: ", fullPath)
-		file.Write(req.Body)
+		n, err := file.Write(req.Body)
+		if err != nil {
+			log.Printf("Error writing to file: %v", err)
+			res.Status(500).Send([]byte("Internal Server Error"))
+			return
+		}
+		log.Printf("Wrote %d bytes to file", n)
 
 		res.Status(201).End()
 	})
