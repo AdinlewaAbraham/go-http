@@ -187,7 +187,7 @@ func (res *HttpResponse) Send(body []byte) error {
 	}
 
 	if _, exists := res.headers["Content-Type"]; !exists && len(body) > 0 {
-		res.headers["Content-Type"] = res.inferContentType(body)
+		res.headers["Content-Type"] = "text/plain" //res.inferContentType(body)
 	}
 
 	res.bodyBuffer.Write(body)
