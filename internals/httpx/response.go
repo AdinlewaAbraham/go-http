@@ -71,6 +71,14 @@ func (res *HttpResponse) fillDefaults() {
 		res.headers = make(map[string]string)
 	}
 
+	if res.status == 0 {
+		res.status = 200
+	}
+
+	if res.statusText == "" {
+		res.statusText = constants.StatusTexts[constants.StatusCode(res.status)]
+	}
+
 	if _, exists := res.headers["Content-Length"]; !exists &&
 		res.bodyBuffer.Len() > 0 &&
 		res.headers["Transfer-Encoding"] != "chunked" {
