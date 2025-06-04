@@ -154,7 +154,7 @@ func (res *HttpResponse) Write(data []byte) {
 
 func (res *HttpResponse) Send(body []byte) error {
 	if res.sent {
-		return errors.New("Already sent a response")
+		return errors.New("already sent a response")
 	}
 
 	if _, exists := res.headers["Content-Type"]; !exists && len(body) > 0 {
@@ -176,7 +176,7 @@ func (res *HttpResponse) SendFile(filename string, body []byte) error {
 		if contentType := mime.TypeByExtension(ext); contentType != "" {
 			res.headers["Content-Type"] = contentType
 		} else {
-			res.headers["Content-Type"] = res.inferContentType(body)
+			res.headers["Content-Type"] = "application/octet-stream" //res.inferContentType(body)
 		}
 	}
 
