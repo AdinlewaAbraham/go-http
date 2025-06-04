@@ -103,6 +103,7 @@ func main() {
 			res.Status(500).Send([]byte("Internal Server Error"))
 			return
 		}
+		file.Close()
 		log.Printf("Wrote %s of size %d bytes to file", req.Body, n)
 
 		res.Status(201).End()
