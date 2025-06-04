@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"mime"
 	"net"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/codecrafters-io/http-server-starter-go/internals/constants"
@@ -172,8 +172,8 @@ func (res *HttpResponse) SendFile(filename string, body []byte) error {
 	}
 
 	if _, exists := res.headers["Content-Type"]; !exists {
-		ext := filepath.Ext(filename)
-		if contentType := mime.TypeByExtension(ext); contentType != "" {
+		ext := strings.ToLower(filepath.Ext(filename))
+		if contentType, ok := constants.ExtToMime[ext]; ok {
 			res.headers["Content-Type"] = contentType
 		} else {
 			res.headers["Content-Type"] = "application/octet-stream"

@@ -83,3 +83,22 @@ const (
 	HeaderKeyContentType   ContentType = "Content-Type"
 	HeaderKeyContentLength ContentType = "Content-Length"
 )
+
+var ExtToMime = map[string]string{
+	".txt":  "text/plain",
+	".html": "text/html",
+	".htm":  "text/html",
+	".css":  "text/css",
+	".js":   "application/javascript",
+	".json": "application/json",
+	".png":  "image/png",
+	".jpg":  "image/jpeg",
+	".jpeg": "image/jpeg",
+	".gif":  "image/gif",
+	".svg":  "image/svg+xml",
+	".pdf":  "application/pdf",
+	".zip":  "application/zip",
+	".tar":  "application/x-tar",
+	".gz":   "application/gzip",
+	".mp4":  "video/mp4",
+}
