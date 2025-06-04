@@ -1,11 +1,10 @@
 package httpx
 
+import "github.com/codecrafters-io/http-server-starter-go/internals/util"
+
 type HttpRequest struct {
-	Method    string
+	util.ParsedRequestInfo
 	URL       string
-	Header    map[string]string
-	Body      []byte
 	Params    map[string]string
-	UserAgent string
 	PathParts []string
 }

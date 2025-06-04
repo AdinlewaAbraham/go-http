@@ -83,10 +83,7 @@ func (m *HttpMux) ExplorePath(method string, segments []string) RouteMatch {
 			node = next
 			match.Middlewares = append(match.Middlewares, node.middlewares...)
 		} else if node.paramChild != nil {
-			log.Printf("node", node)
 			node = node.paramChild
-			log.Printf("node paramchild", node)
-			log.Printf("writing key: %s to value: ", node.paramName, segment)
 			match.Params[node.paramName] = segment
 			match.Middlewares = append(match.Middlewares, node.middlewares...)
 		} else {

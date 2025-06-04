@@ -42,11 +42,11 @@ func (s *Server) Listen(port string, cb func()) error {
 			defer conn.Close()
 
 			req, err := s.parseConn(conn)
+			res := httpx.NewResponse(conn)
 			if err != nil {
-				// shit went wrong
+				res.Status(500).Send([]byte(fmt.Sprintf("Failed to parse request %s", err.Error())))
 				return
 			}
-			res := httpx.NewResponse(conn)
 
 			s.mux.RouteRequest(req, res)
 		}()
@@ -64,7 +64,7 @@ func (s *Server) parseConn(conn net.Conn) (req *httpx.HttpRequest, err error) {
 	if err != nil {
 		return req, err
 	}
-	
+
 	info, extractUrlErr := util.ExtractUrl(buff)
 	if extractUrlErr != nil {
 		return req, extractUrlErr
@@ -73,10 +73,9 @@ func (s *Server) parseConn(conn net.Conn) (req *httpx.HttpRequest, err error) {
 	segments := strings.Split(strings.Trim(info.Path, "/"), "/")
 
 	req = &httpx.HttpRequest{
-		Method:    info.Method,
-		URL:       info.Host + info.Path,
-		UserAgent: info.UserAgent,
-		PathParts: segments,
+		ParsedRequestInfo: *info,
+		URL:               info.Host + info.Path,
+		PathParts:         segments,
 	}
 	return req, nil
 }
