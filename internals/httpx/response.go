@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"mime"
 	"net"
-	"net/http"
 	"path/filepath"
 	"strconv"
 	"time"
@@ -34,34 +33,6 @@ func (res *HttpResponse) writeChunk(data []byte) {
 	res.conn.Write([]byte("\r\n"))
 }
 
-func (res *HttpResponse) inferContentType(body []byte) string {
-	contentType := http.DetectContentType(body)
-
-	if contentType == "text/plain; charset=utf-8" {
-		trimmed := bytes.TrimSpace(body)
-		if len(trimmed) > 0 {
-			firstChar := trimmed[0]
-			lastChar := trimmed[len(trimmed)-1]
-
-			if (firstChar == '{' && lastChar == '}') ||
-				(firstChar == '[' && lastChar == ']') {
-				return "application/json"
-			}
-
-			if bytes.HasPrefix(bytes.ToLower(trimmed), []byte("<!doctype html")) ||
-				bytes.HasPrefix(bytes.ToLower(trimmed), []byte("<html")) {
-				return "text/html; charset=utf-8"
-			}
-
-			if bytes.HasPrefix(trimmed, []byte("<?xml")) ||
-				bytes.HasPrefix(trimmed, []byte("<")) {
-				return "application/xml"
-			}
-		}
-	}
-
-	return contentType
-}
 func (res *HttpResponse) fillDefaults() {
 	if res.protocol == "" {
 		res.protocol = "HTTP/1.1"
