@@ -96,7 +96,7 @@ func main() {
 			return
 		}
 
-		log.Println("created file: ", fullPath)
+		log.Printf("Raw req.Body: %q", req.Body)
 		n, err := file.Write(req.Body)
 		if err != nil {
 			log.Printf("Error writing to file: %v", err)
