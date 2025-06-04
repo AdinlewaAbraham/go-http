@@ -46,6 +46,7 @@ func main() {
 		res.Send([]byte(id))
 	})
 	httpServer.Get("/user-agent", func(req *httpx.HttpRequest, res *httpx.HttpResponse) {
+		res.SetHeader("Content-Type", "text/plain")
 		res.Status(200).Send([]byte(req.UserAgent))
 	})
 	httpServer.Get("/files/:filename", func(req *httpx.HttpRequest, res *httpx.HttpResponse) {
